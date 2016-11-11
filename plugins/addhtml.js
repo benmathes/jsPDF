@@ -22,19 +22,26 @@
 	 * @param y {Number} starting Y coordinate in jsPDF instance's declared units.
 	 * @param options {Object} Additional options, check the code below.
 	 * @param callback {Function} to call when the rendering has finished.
+     * @param _html2canvas {Object} supply html2canvas if you use jsPDF where you can't have a global html2canvas
 	 * NOTE: Every parameter is optional except 'element' and 'callback', in such
 	 *       case the image is positioned at 0x0 covering the whole PDF document
 	 *       size. Ie, to easily take screenshots of webpages saving them to PDF.
 	 * @deprecated This is being replace with a vector-supporting API. See
 	 * [this link](https://cdn.rawgit.com/MrRio/jsPDF/master/examples/html2pdf/showcase_supported_html.html)
 	 */
-	jsPDFAPI.addHTML = function (element, x, y, options, callback) {
+	jsPDFAPI.addHTML = function (element, x, y, options, callback, _html2canvas) {
 		'use strict';
 
-		if(typeof html2canvas === 'undefined' && typeof rasterizeHTML === 'undefined')
-			throw new Error('You need either '
-				+'https://github.com/niklasvh/html2canvas'
-				+' or https://github.com/cburgmer/rasterizeHTML.js');
+		if(typeof html2canvas === 'undefined' && typeof rasterizeHTML === 'undefined') {
+            if(typeof _html2canvas === 'Object') {
+                html2canvas = _html2canvas;
+            }
+            else {
+    			throw new Error('You need either '
+    				+'https://github.com/niklasvh/html2canvas'
+    		        +' or https://github.com/cburgmer/rasterizeHTML.js');
+            }
+        }
 
 		if(typeof x !== 'number') {
 			options = x;
